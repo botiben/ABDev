@@ -1,11 +1,11 @@
 import json
+import AllergenWeighting
+
 
 def sortResultFn(testResult):
     return testResult['Size']
 
-def weightResultFn(testResult, weight):
-    testResult['Size'] = testResult['Size'] + weight
-    return testResult
+
 
 def json_file_navigation(json_file):
     with open(json_file, 'r') as file:
