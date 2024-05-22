@@ -1,27 +1,62 @@
-import json
+# Functions for selecting Allergens
 
-def order_and_select_top_results(json_file):
-    """
-    Orders the TestResults array in the JSON file by Size and selects the top 5 results.
+def isMostlyPollen(recommendedResults, allergenCount):
+    mostlyPollen=False
+    pollenAllergens = [2204, 2306, 1019, 1169, 1664, 2678, 1436, 1061, 2564, 1910, 1703, 2627, 1214, 1541, 1340, 2099, 2051, 1454, 1832, 1661, 537, 1745, 545, 718, 611, 831, 825, 777, 1082, 1859, 2414, 1517, 1301, 2318, 2213, 2058, 1787, 1946, 1406]
+    pollenCount = 0
 
-    Args:
-    json_file (str): Path to the JSON file containing TestResults array.
+    for result in recommendedResults:
+        if result["AllergenID"] in pollenAllergens:
+            pollenCount += 1
 
-    Returns:
-    list: Top 5 TestResults ordered by Size.
-    """
-    with open(json_file, 'r') as file:
-        data = json.load(file)
+    if (pollenCount/allergenCount > .5):
+        mostlyPollen = True
 
-    # Sort TestResults array by Size
-    ordered_results = sorted(data['AllergenSelectionInput']['TestResults'], key=lambda x: x['Size'], reverse=True)
+    if (pollenCount/allergenCount == .5) and (recommendedResults[0]["AllergenID"] in pollenAllergens):  
+        mostlyPollen = True  
 
-    # Select top 5 results
-    top_5_results = ordered_results[:5]
+    return mostlyPollen
+ 
+def recommendAllergens(intakeData, orderedResults):
 
-    return top_5_results
+    # How many allergens to recommend based on therapy
+    allergenCount = 0
+    therapyType = intakeData['AllergenSelectionInput']['Intake']['Immunotherapy']
+    if therapyType == "Shots":
+        allergenCount = 5
+    elif therapyType == "Drops":
+        allergenCount = 10
+    else: 
+        allergenCount = len(orderedResults)
 
-# Example usage
-json_file_path = 'AllergySelectionInput.json'
-top_results = order_and_select_top_results(json_file_path)
-print(top_results)
+    # No Contact with animals
+    animalInteraction = intakeData['AllergenSelectionInput']['Intake']['AnimalInteraction']
+    animalAllergens = [4825, 4084, 4402, 4815, 4350, 4812, 4856 ]
+    orderedResults = [result for result in orderedResults if result["AllergenID"] not in animalAllergens]
+
+    # Select the correct number of allergens from the weighted results
+    recommendedAllergens = orderedResults[:allergenCount]
+
+    # Pollen or Pets and indoor
+    #   - What is the majority of recommended allergens? Pollen or other
+    mostlyPollen = isMostlyPollen(recommendedAllergens, allergenCount)
+    #   - Remove the minority from ordered results
+    pollenAllergens = [2204, 2306, 1019, 1169, 1664, 2678, 1436, 1061, 2564, 1910, 1703, 2627, 1214, 1541, 1340, 2099, 2051, 1454, 1832, 1661, 537, 1745, 545, 718, 611, 831, 825, 777, 1082, 1859, 2414, 1517, 1301, 2318, 2213, 2058, 1787, 1946, 1406]
+    if mostlyPollen:
+        orderedResults = [result for result in orderedResults if result["AllergenID"] not in pollenAllergens]
+    else:
+        orderedResults = [result for result in orderedResults if result["AllergenID"] in pollenAllergens]
+    #   - Get new recommended allergens from ordered results
+    recommendedAllergens = orderedResults[:allergenCount]
+
+    # Change allergen recommendation based on severity
+    severityIntake = intakeData['AllergenSelectionInput']['Intake']['Severity']
+    severe = 'high' in severityIntake.lower()
+    if mostlyPollen and severe and (therapyType == "Shots"):
+        # Remove last allergen
+        recommendedAllergens.pop()
+        # Add Timothy from the ordered results
+        timothyResult = [result for result in orderedResults if result["AllergenID"] == 831]
+        recommendedAllergens.append(timothyResult)
+    
+    return recommendedAllergens, mostlyPollen

@@ -1,15 +1,23 @@
 {
-    "AllergenSelectionInput": {
-      "Intake" : {
-        "Seasons": "Summer"
-      },
-      "TestResults" : [
-        {"AllergenID": "1111", "AllergenName": "North American Tree", "Size": 20 },
-        {"AllergenID": "6666", "AllergenName": "Yellow Tree", "Size": 15 },
-        {"AllergenID": "2222", "AllergenName": "South American Tree", "Size": 19 },
-        {"AllergenID": "5555", "AllergenName": "Green Tree", "Size": 16 },
-        {"AllergenID": "3333", "AllergenName": "Red Tree", "Size": 18 },
-        {"AllergenID": "4444", "AllergenName": "Blue Tree", "Size": 17 }
+  "AllergenSelectionInput": {
+    "Intake" : {
+      "Seasons": "Fall",
+      "Pets": "Dog",
+      "AnimalInteraction": false,
+      "TimeOfDay": "Evening",
+      "Severity": "High",
+      "Immunotherapy": "Shots"
+    },
+    "TestResults" : [
+        {"AllergenID": 1661, "AllergenName": "North American Tree", "Size": 20 },
+        {"AllergenID": 2627, "AllergenName": "Yellow Tree", "Size": 15 },
+        {"AllergenID": 2222, "AllergenName": "South American Tree", "Size": 19 },
+        {"AllergenID": 5555, "AllergenName": "Green Tree", "Size": 16 },
+        {"AllergenID": 3333, "AllergenName": "Red Tree", "Size": 18 },
+        {"AllergenID": 4444, "AllergenName": "Blue Tree", "Size": 17 },
+        {"AllergenID": 4825, "AllergenName": "Dog Hair and Dander (4825)", "Size": 12 },
+        {"AllergenID": 4084, "AllergenName": "Dog Hair and Dander (4084)", "Size": 17 },
+        {"AllergenID": 831, "AllergenName": "Timothy (Standardized)", "Size": 19 }
       ]  
     }
   }

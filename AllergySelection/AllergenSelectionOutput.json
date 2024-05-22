@@ -1,0 +1,22 @@
+{
+    "AllergenSelectionOutput": {
+        "SoapNotes": "\n Patient requests shots, so 5 allergens will be selected.\n Patient does not have contact with animals, so animals should be excluded.\n Symptoms are worse late in the day, so grasses and weeds are weighted.\n Symptoms are severe, so Timothy Grass should be doubled\n Allergens with highest reaction are mostly NOT pollens.  Recommending animals and interior allergens.",
+        "RecommendedAllergens": [
+            {
+                "AllergenID": 1661,
+                "AllergenName": "North American Tree",
+                "Size": 20
+            },
+            {
+                "AllergenID": 831,
+                "AllergenName": "Timothy (Standardized)",
+                "Size": 19
+            },
+            {
+                "AllergenID": 2627,
+                "AllergenName": "Yellow Tree",
+                "Size": 15
+            }
+        ]
+    }
+}
