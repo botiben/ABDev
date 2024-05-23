@@ -11,6 +11,8 @@ def getAllergenRecommendations(json_file):
     with open(json_file, 'r') as file:
         data = json.load(file)
 
+    requestId = data['AllergenSelectionInput']['RequestId']
+
     # Weight results according to intake info
     weightedResults = weightAllergyResults(data)
 
@@ -32,7 +34,7 @@ def getAllergenRecommendations(json_file):
 
     # Compile JSON
     outputDict = {
-
+        "RequestId" : requestId,
         "SoapNotes" : soapNotes,
         "RecommendedAllergens" : recommendedAllergens
     }
